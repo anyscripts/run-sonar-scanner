@@ -71,9 +71,8 @@ runs:
                   -D sonar.projectName="$PROJECT_NAME ($BRANCH_NAME)" \
                   -D sonar.projectVersion="$PROJECT_VERSION" \
                   -D sonar.qualitygate="$QUALITY_GATE" \
-                  -D sonar.analysis.execType="pipeline" \
+                  -D sonar.analysis.execType="console" \
                   -D sonar.analysis.repo="$PROJECT_NAME" \
                   -D sonar.analysis.repoUrl="$REPO_URL" \
                   -D sonar.analysis.branch="$BRANCH_NAME" \
-                  -D sonar.scm.provider=git \
                   -D sonar.qualitygate.wait=true
