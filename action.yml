@@ -1,5 +1,14 @@
 name: Run SonarScanner
 
+inputs:
+  SONAR_URL:
+    description: 'SonarQube URL'
+    required: true
+
+  SONAR_TOKEN:
+    description: 'SonarQube TOKEN'
+    required: true
+
 runs:
   using: 'composite'
   steps:
@@ -8,6 +17,11 @@ runs:
     - id: check-scanner
       shell: bash
       run: |
+        which jq > /dev/null
+        if [ $? -ne 0 ]; then
+          sudo apt-get install jq -y
+        fi
+        
         VERSION="${{ steps.get-sonar-scanner.outputs.version }}"
         DOWNLOAD_URL="${{ steps.get-sonar-scanner.outputs.linux }}"
         
@@ -27,5 +41,15 @@ runs:
         
         PROJECT_NAME="${GITHUB_REPOSITORY##*/}"
         BRANCH_NAME="${GITHUB_REF##*/}"
+        PROJECT_KEY="$(Build.Repository.Name)...$BRANCH_NAME"
         
-        echo "Analyzing $PROJECT_NAME/$BRANCH_NAME ..."
+        PROJECT_VERSION="unknown"
+        if [ -f "package.json" ]; then
+          PROJECT_VERSION=$(jq -r '.version // "0.0.0"' package.json)
+        fi
+        
+        echo "Analyzing $PROJECT_NAME@$BRANCH_NAME v.$PROJECT_VERSION..."
+        echo "SonarQube URL: ${{inputs.SONAR_URL}}"
+        
+        # encode project name
+        # ENCODED_NAME=$(urlencode "$PROJECT_NAME ($BRANCH_NAME)")
