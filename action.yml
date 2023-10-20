@@ -9,6 +9,9 @@ inputs:
     description: 'SonarQube TOKEN'
     required: true
 
+  SONAR_QUALITY_GATE:
+    description: 'SonarQube Quality Gate'
+
 runs:
   using: 'composite'
   steps:
@@ -39,18 +42,22 @@ runs:
           echo "sonar-scanner is now installed"
         fi
         
+        SONAR_SCANNER=/tools/sonar-scanner-$VERSION-linux/bin/sonar-scanner"
+        QUALITY_GATE="${{inputs.SONAR_QUALITY_GATE}}" || "Sonar way"
+        
         PROJECT_NAME="${GITHUB_REPOSITORY##*/}"
         BRANCH_NAME="${GITHUB_REF##*/}"
-        PROJECT_KEY=$(echo "$GITHUB_REPOSITORY...$GITHUB_REF" | sed 's/\//_/g')
+        PROJECT_KEY=$(echo "$GITHUB_REPOSITORY...$BRANCH_NAME" | sed 's/\//_/g')
         
         PROJECT_VERSION="unknown"
         if [ -f "package.json" ]; then
           PROJECT_VERSION=$(jq -r '.version // "0.0.0"' package.json)
         fi
         
-        echo "Analyzing $PROJECT_NAME@$BRANCH_NAME v.$PROJECT_VERSION..."
-        echo "SonarQube URL: ${{inputs.SONAR_URL}}"
-        echo "Project key:   $PROJECT_KEY"
+        echo "Project:         $PROJECT_NAME@$BRANCH_NAME v.$PROJECT_VERSION..."
+        echo "Project key:     $PROJECT_KEY"
+        echo "Project version: $PROJECT_VERSION"        
+        echo "Quality Gate:    $QUALITY_GATE"
         
         # encode project name
         # ENCODED_NAME=$(urlencode "$PROJECT_NAME ($BRANCH_NAME)")
