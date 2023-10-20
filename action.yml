@@ -41,7 +41,7 @@ runs:
         
         PROJECT_NAME="${GITHUB_REPOSITORY##*/}"
         BRANCH_NAME="${GITHUB_REF##*/}"
-        PROJECT_KEY="$PROJECT_NAME...$BRANCH_NAME"
+        PROJECT_KEY=$(echo "$GITHUB_REPOSITORY...$GITHUB_REF" | sed 's/\//_/g')
         
         PROJECT_VERSION="unknown"
         if [ -f "package.json" ]; then
@@ -50,6 +50,7 @@ runs:
         
         echo "Analyzing $PROJECT_NAME@$BRANCH_NAME v.$PROJECT_VERSION..."
         echo "SonarQube URL: ${{inputs.SONAR_URL}}"
+        echo "Project key:   $PROJECT_KEY"
         
         # encode project name
         # ENCODED_NAME=$(urlencode "$PROJECT_NAME ($BRANCH_NAME)")
