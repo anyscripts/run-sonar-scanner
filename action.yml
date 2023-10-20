@@ -47,6 +47,7 @@ runs:
           QUALITY_GATE="Sonar way"
         fi
         
+        REPO_URL=https://github.com/${GITHUB_REPOSITORY}/tree/${GITHUB_REF##*/}
         PROJECT_NAME="${GITHUB_REPOSITORY##*/}"
         BRANCH_NAME="${GITHUB_REF##*/}"
         PROJECT_KEY=$(echo "$GITHUB_REPOSITORY...$BRANCH_NAME" | sed 's/\//_/g')
@@ -57,9 +58,20 @@ runs:
         fi
         
         echo "Project:         $PROJECT_NAME@$BRANCH_NAME v.$PROJECT_VERSION..."
+        echo "Repo:            $REPO_URL"
         echo "Project key:     $PROJECT_KEY"
         echo "Project version: $PROJECT_VERSION"        
         echo "Quality Gate:    $QUALITY_GATE"
-        
-        # encode project name
-        # ENCODED_NAME=$(urlencode "$PROJECT_NAME ($BRANCH_NAME)")
+
+#        "$SONAR_SCANNER" \
+#                  -D sonar.host.url="${{inputs.SONAR_URL}}" \
+#                  -D sonar.token="${{inputs.SONAR_TOKEN}}" \
+#                  -D sonar.projectKey="$PROJECT_KEY" \
+#                  -D sonar.projectName="$PROJECT_NAME ($BRANCH_NAME)" \
+#                  -D sonar.projectVersion="$PROJECT_VERSION" \
+#                  -D sonar.qualitygate="$QUALITY_GATE" \
+#                  -D sonar.analysis.execType="pipeline" \
+#                  -D sonar.analysis.repo="$PROJECT_NAME" \
+#                  -D sonar.analysis.repoUrl="{{.REPO_URL}}" \
+#                  -D sonar.analysis.branch="$BRANCH_NAME" \
+#                  -D sonar.qualitygate.wait=true
