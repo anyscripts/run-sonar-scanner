@@ -42,7 +42,7 @@ runs:
           echo "sonar-scanner is now installed"
         fi
         
-        SONAR_SCANNER=/tools/sonar-scanner-$VERSION-linux/bin/sonar-scanner"
+        SONAR_SCANNER="/tools/sonar-scanner-$VERSION-linux/bin/sonar-scanner"
         QUALITY_GATE="${{inputs.SONAR_QUALITY_GATE}}" || "Sonar way"
         
         PROJECT_NAME="${GITHUB_REPOSITORY##*/}"
