@@ -63,6 +63,7 @@ runs:
         echo "Project version: $PROJECT_VERSION"        
         echo "Quality Gate:    $QUALITY_GATE"
 
+        cd ..
         "$SONAR_SCANNER" \
                   -D sonar.host.url="${{inputs.SONAR_URL}}" \
                   -D sonar.token="${{inputs.SONAR_TOKEN}}" \
