@@ -1,1 +1,14 @@
 name: Run SonarScanner
+
+runs:
+  using: 'composite'
+  steps:
+    - uses: anyscripts/get-sonar-scanner@main
+      id: get-sonar-scanner
+    - id: check-scanner
+      shell: bash
+      run: |
+        VERSION="${{ steps.get-sonar-scanner.outputs.version }}"
+        DOWNLOAD_URL="${{ steps.get-sonar-scanner.outputs.linux }}"
+        
+        echo "Downloading sonar-scanner v.$VERSION from $DOWNLOAD_URL"
