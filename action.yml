@@ -41,7 +41,7 @@ runs:
         
         PROJECT_NAME="${GITHUB_REPOSITORY##*/}"
         BRANCH_NAME="${GITHUB_REF##*/}"
-        PROJECT_KEY="$(Build.Repository.Name)...$BRANCH_NAME"
+        PROJECT_KEY="$PROJECT_NAME...$BRANCH_NAME"
         
         PROJECT_VERSION="unknown"
         if [ -f "package.json" ]; then
