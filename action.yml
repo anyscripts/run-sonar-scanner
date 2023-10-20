@@ -12,3 +12,15 @@ runs:
         DOWNLOAD_URL="${{ steps.get-sonar-scanner.outputs.linux }}"
         
         echo "Downloading sonar-scanner v.$VERSION from $DOWNLOAD_URL"
+        
+        sudo mkdir -p /tools
+
+        if [ -d "/tools/sonar-scanner-$VERSION-linux" ]; then
+          echo "sonar-scanner is already installed."
+        else
+          echo "sonar-scanner is not installed. Downloading and installing..."
+          wget "$DOWNLOAD_URL" -P /tmp
+          sudo unzip /tmp/sonar-scanner-cli-$VERSION-linux.zip -d /tools/
+          /tools/sonar-scanner-$VERSION-linux/bin/sonar-scanner --version
+          echo "sonar-scanner is now installed"
+        fi
