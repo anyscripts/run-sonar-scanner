@@ -74,4 +74,5 @@ runs:
                   -D sonar.analysis.repo="$PROJECT_NAME" \
                   -D sonar.analysis.repoUrl="$REPO_URL" \
                   -D sonar.analysis.branch="$BRANCH_NAME" \
+                  -D sonar.scm.provider=git \
                   -D sonar.qualitygate.wait=true
